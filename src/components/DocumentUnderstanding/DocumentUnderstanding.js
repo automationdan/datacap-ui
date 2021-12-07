@@ -67,7 +67,7 @@ export default class UploadFiles extends Component {
       message: "Rules processed"
     })
     if(rulesToExecute.length > counter){
-      if(workflow == "TradeFinance"){
+      if(workflow === "TradeFinance"){
           ruleExec = "Configuration,Convert,InsightRecognition,Classify,AnalysePageLayout,EntitySearch,Collection";
           counter = 7
       }
@@ -92,7 +92,6 @@ export default class UploadFiles extends Component {
       }).then((response)=>{
         console.log(response.data)
           this.setState({
-            message: rulesToExecute[counter] + "processed",
             results: response.data.values,
             message: "Document Processed",
             transactionId: response.data.transactionalId,

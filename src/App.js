@@ -21,7 +21,7 @@ class App extends Component {
   render(){
     return (
       <div>
-
+      {console.log(process.env.REACT_APP_DCAPPROXY)}
         <DataCapHeader />
         <Content>
           <Switch>

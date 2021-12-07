@@ -13,6 +13,7 @@
     "carbon-components-react": "^7.25.0",
     "carbon-icons": "^7.0.7",
     "core-js": "^3.19.3",
+    "env-cmd": "^10.1.0",
     "react": "^17.0.2",
     "react-doc-viewer": "^0.1.5",
     "react-dom": "^17.0.2",
@@ -24,8 +25,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd react-scripts start",
+    "build": "env-cmd react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
