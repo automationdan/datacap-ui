@@ -30,7 +30,9 @@ export default class UploadFiles extends Component {
     /*this.setState({
       selectedFiles: event.target.files,
     });*/
+    console.log("hello world")
     let currentFile = event.target.files[0];
+    event.target.files = null;
     UploadService.upload(currentFile,thepage, (event) => {
       this.setState({
         progress: Math.round((100 * event.loaded) / event.total),
@@ -43,7 +45,7 @@ export default class UploadFiles extends Component {
             transactionalId: response.data.transactionalId,
             message: "Uploaded Document",
             docUrl: "/api/documentunderstanding/getdoc/" + response.data.transactionalId+ "/pdf",
-            selectedFiles: event.target.files
+            selectedFiles: currentFile
         })
       })
 
@@ -53,16 +55,92 @@ export default class UploadFiles extends Component {
 
   }
 
+  executeRules(transactionaId, application, workflow,docId,rulesToExecute, counter){
+
+    console.log(counter);
+    console.log(rulesToExecute[counter]);
+    console.log(rulesToExecute)
+
+    let ruleExec = rulesToExecute[counter];
+
+    if(rulesToExecute.length > counter){
+      if(workflow == "TradeFinance"){
+          ruleExec = "Configuration,Convert,InsightRecognition,Classify,AnalysePageLayout,EntitySearch,Collection";
+          counter = 7
+      }
+
+      UploadService.executeRule(this.state.transactionalId,application,workflow,ruleExec,docId,(event) =>{
+        this.setState({
+          progress: Math.round((100 * event.loaded) / event.total),
+        });
+      }).then((response)=>{
+        this.setState({
+          message: rulesToExecute[counter] + "processed"
+        })
+        counter++
+        console.log(counter);
+        this.executeRules(transactionaId,application,workflow,docId,rulesToExecute,counter);
+      })
+    }else{
+      UploadService.getTransactionalFile(transactionaId,"xml", docId, (event) =>{
+        this.setState({
+          progress: Math.round((100 * event.loaded) / event.total),
+        });
+      }).then((response)=>{
+        console.log(response.data)
+          this.setState({
+            message: rulesToExecute[counter] + "processed",
+            results: response.data.values,
+            message: "Document Processed",
+            transactionId: response.data.transactionalId,
+            docStatus: "Done"
+          })
+
+          console.log(counter);
+          //this.executeRules(transactionaId,application,workflow,docId,rulesToExecute,counter);
+        })
+
+    }
+  }
   upload() {
 
     let application = this.props.application
     let workflow = this.props.workflow
     let rules = this.props.rules
+    let docId = this.props.docId
+    let currentRule = 0;
     console.log("upload" + this.state.transactionalId);
     this.setState({
       docStatus: "Processing",
     });
-    UploadService.executeRules(this.state.transactionalId,application,workflow,rules,(event) =>{
+
+    var rulesToExecute =rules.split(",")
+    console.log(rulesToExecute);
+    console.log(rulesToExecute.length);
+    this.executeRules(this.state.transactionalId,application,workflow,docId,rulesToExecute,currentRule);
+
+
+
+    this.setState({
+      selectedFiles: undefined,
+    });
+  }
+
+  upload2() {
+
+    let application = this.props.application
+    let workflow = this.props.workflow
+    let rules = this.props.rules
+    let docId = this.props.docId
+    console.log("upload" + this.state.transactionalId);
+    this.setState({
+      docStatus: "Processing",
+    });
+
+    var rulesToExecute =rules.split(",")
+    console.log(rulesToExecute.length);
+    let currentRule = 0;
+    UploadService.executeRules(this.state.transactionalId,application,workflow,rulesToExecute[currentRule],docId,(event) =>{
         this.setState({
         progress: Math.round((100 * event.loaded) / event.total),
       });
@@ -111,7 +189,8 @@ export default class UploadFiles extends Component {
         <FileUploaderDropContainer
           accept={[
             '.jpg',
-            '.pdf'
+            '.pdf',
+            '.tif'
           ]}
           onAddFiles={this.selectFile}
           buttonkind="primary"
@@ -141,7 +220,7 @@ export default class UploadFiles extends Component {
      <FileViewer fileType="pdf" filePath={this.state.docUrl} />
 
     }
-  
+
     </Column>
       <Column>
       <h1>Document Details</h1>

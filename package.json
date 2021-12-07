@@ -27,7 +27,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://datacap-api-nfs-client-provisioner.cp4ba-uk-4d2c0e6e364e1cb6bda1360a996d18f0-0000.eu-gb.containers.appdomain.cloud",
+  "plonker": "http://datacap-api-nfs-client-provisioner.cp4ba-uk-4d2c0e6e364e1cb6bda1360a996d18f0-0000.eu-gb.containers.appdomain.cloud",
+  "proxy": "http://localhost:3001",
+
   "eslintConfig": {
     "extends": [
       "react-app",

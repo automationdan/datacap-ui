@@ -14,10 +14,10 @@ class UploadFilesService {
     });
   }
 
-  executeRules(transactionalId,application, workflow, rules, onUploadProgress) {
+  executeRule(transactionalId,application, workflow, rules, docId, onUploadProgress) {
     let formData = new FormData();
 
-    let url = "/executeRules/" + transactionalId + "/" + application + "/"+workflow +"/"+rules+"/xml"
+    let url = "/executeRule/" + transactionalId + "/" + application + "/"+workflow +"/"+rules
     console.log(url)
 
     return http.post(url, formData, {
@@ -27,6 +27,33 @@ class UploadFilesService {
       onUploadProgress,
     });
   }
+
+  executeRules(transactionalId,application, workflow, rules, docId, onUploadProgress) {
+    let formData = new FormData();
+
+    let url = "/executeRules/" + transactionalId + "/" + application + "/"+workflow +"/"+rules+"/xml/"+ docId
+    console.log(url)
+
+    return http.post(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress,
+    });
+  }
+
+  getTransactionalFile(transactionalId,ext, docId, onUploadProgress) {
+    let formData = new FormData();
+
+    let url = "/getDataFile/" + transactionalId + "/" + ext + "/"+docId
+    console.log(url)
+
+    return http.get(url, formData, {
+      onUploadProgress,
+    });
+  }
+
+
 
   getFiles() {
     return http.get("/files");

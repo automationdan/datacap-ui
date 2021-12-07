@@ -4,7 +4,8 @@ import DocumentUnderstanding from '../../components/DocumentUnderstanding'
 
 const Invoices = () => {
   return <div>
-    <DocumentUnderstanding page="Invoice_Page" application="dan" workflow="dan" rules="Documents,NormalOCR,GenerateText,InvoiceRules" />
+    <DocumentUnderstanding page="Other" application="TradeFinance" workflow="TradeFinance"
+    rules="Configuration,Convert,InsightRecognition,Classify,AnalysePageLayout" docId="TM000002" />
   </div>;
 };
 
