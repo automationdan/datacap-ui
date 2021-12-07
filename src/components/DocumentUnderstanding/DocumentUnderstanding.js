@@ -15,7 +15,7 @@ export default class UploadFiles extends Component {
       selectedFiles: undefined,
       currentFile: undefined,
       progress: 0,
-      message: "Please Upload Your Document",
+      message: "Please Upload Your " +this.props.page,
       results: [],
       docUrls: [ { fileData: '' } ],
       fileInfos: [],
@@ -63,6 +63,9 @@ export default class UploadFiles extends Component {
 
     let ruleExec = rulesToExecute[counter];
 
+    this.setState({
+      message: "Rules processed"
+    })
     if(rulesToExecute.length > counter){
       if(workflow == "TradeFinance"){
           ruleExec = "Configuration,Convert,InsightRecognition,Classify,AnalysePageLayout,EntitySearch,Collection";
